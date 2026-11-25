@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Успеваемость — Пётр Иванов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Wix+Madefor+Display:wght@700&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --text-brand: #47629f;
+    --text-primary: #1f2532;
+    --text-tertiary: #9ba3b3;
+    --text-violet-medium: #83a2e3;
+    --surface-brand-subtle: #f4f7fc;
+    --surface-brand-soft-medium: #e8effc;
+    --surface-brand-base-medium: #5c79b7;
+    --surface-neutral-subtle: #ffffff;
+    --surface-neutral-medium: #f5f6f9;
+    --green: #9dca3c;
+    --amber: #ffae0b;
+    --lavender: #ac92ea;
+    --sidebar: #030f48;
+    --sidebar-active: #05166c;
+    --sidebar-text: #d3d5dc;
+    --accent100: #5a75f8;
+    --f-text: "Wix Madefor Text", system-ui, sans-serif;
+    --f-display: "Wix Madefor Display", system-ui, sans-serif;
+    --f-inter: "Inter", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body { font-family: var(--f-text); -webkit-font-smoothing: antialiased; color: var(--text-primary); }
+  img { display: block; }
+  button { font: inherit; border: 0; background: none; cursor: pointer; color: inherit; }
+
+  /* Переключение версий: десктоп по умолчанию, мобилка — на узких экранах */
+  .mobile { display: none; }
+  @media (max-width: 767px) {
+    .desktop { display: none; }
+    .mobile { display: block; }
+  }
+  body.force-desktop .desktop { display: flex; }
+  body.force-desktop .mobile { display: none; }
+  body.force-mobile .desktop { display: none; }
+  body.force-mobile .mobile { display: block; }
+
+  /* Общие элементы */
+  .avatars { display: flex; align-items: center; flex-shrink: 0; isolation: isolate; }
+  .avatar { width: 36px; height: 36px; border: 2px solid #fff; border-radius: 999px; overflow: hidden; flex-shrink: 0; position: relative; }
+  .avatar + .avatar { margin-left: -12px; }
+  .avatar:nth-child(1) { z-index: 2; }
+  .avatar:nth-child(2) { z-index: 1; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+  .avatar.initials { background: var(--lavender); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; line-height: 16px; }
+
+  .bar { display: flex; gap: 2px; height: 8px; border-radius: 100px; width: 100%; }
+  .bar .seg { height: 8px; border-radius: 100px; flex-shrink: 0; }
+  .bar .seg.done { background: var(--green); }
+  .bar .seg.errors { background: var(--amber); }
+  .legend { display: flex; gap: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; white-space: nowrap; color: var(--text-tertiary); }
+  .legend-item img { width: 8px; height: 8px; }
+
+  /* ================= DESKTOP ================= */
+  .desktop { display: flex; min-height: 100vh; background: var(--surface-brand-subtle); }
+  .sidebar { width: 250px; flex-shrink: 0; background: var(--sidebar); padding: 24px 0; display: flex; flex-direction: column; justify-content: space-between; position: sticky; top: 0; height: 100vh; font-family: var(--f-inter); }
+  .sidebar .logo { padding: 8px 24px; height: 66px; display: flex; align-items: center; }
+  .sidebar .logo img { width: 112px; height: 50px; }
+  .sidebar .menu { margin-top: 40px; }
+  .menu-item { display: flex; align-items: center; gap: 4px; height: 48px; padding: 12px 24px; color: var(--sidebar-text); font-size: 16px; line-height: 24px; cursor: pointer; }
+  .menu-item .ic { width: 24px; height: 24px; flex-shrink: 0; }
+  .menu-item .label { flex: 1; min-width: 0; }
+  .menu-item.bold { color: #fff; font-weight: 700; }
+  .menu-item.child { gap: 8px; }
+  .menu-item.child .spacer { width: 24px; height: 24px; flex-shrink: 0; }
+  .menu-item.active { background: var(--sidebar-active); color: #fff; font-weight: 700; }
+  .menu-item:not(.active):hover { background: rgba(255,255,255,.04); }
+  .counter { background: var(--accent100); color: #fff; font-size: 12px; line-height: 1; min-width: 20px; padding: 4px 6px; border-radius: 100px; text-align: center; }
+
+  .main { flex: 1; min-width: 0; padding-bottom: 48px; }
+  .d-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 40px; }
+  .d-header .back { width: 24px; height: 24px; }
+  .user { display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; color: var(--text-primary); }
+  .user .ava { width: 40px; height: 40px; border: 2px solid #fff; border-radius: 300px; object-fit: cover; }
+  .user .name { font-weight: 600; }
+  .d-top { padding: 8px 40px 0; display: flex; flex-direction: column; gap: 24px; }
+  .d-title { font-family: var(--f-display); font-weight: 700; font-size: 22px; line-height: 28px; color: var(--text-primary); }
+  .d-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .d-chip { display: flex; align-items: center; gap: 8px; min-width: 36px; padding: 4px 12px; border-radius: 100px; background: #fff; color: var(--text-brand); font-size: 14px; line-height: 20px; }
+  .d-chip img { width: 20px; height: 20px; }
+  .d-chip.active { background: var(--surface-brand-base-medium); color: #fff; }
+  .d-chip.active img { filter: brightness(0) invert(1); }
+  .d-stats { display: flex; gap: 8px; }
+  .d-stat { flex: 1; min-width: 0; background: #fff; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+  .d-stat .top { display: flex; align-items: center; gap: 8px; }
+  .d-stat .icon { width: 70px; height: 70px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .d-stat .icon img.full { width: 70px; height: 70px; }
+  .d-stat .icon img.pic { width: 53px; height: 53px; transform: translate(.5px,.5px); }
+  .d-stat .value { font-family: var(--f-display); font-weight: 700; font-size: 22px; line-height: 28px; color: var(--text-brand); white-space: nowrap; }
+  .d-stat .name { font-size: 14px; line-height: 20px; color: var(--text-brand); }
+  .d-stat .desc { font-size: 14px; line-height: 20px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .d-content { padding: 24px 40px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .d-card { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+  .d-card .head { display: flex; gap: 12px; align-items: flex-start; }
+  .d-card .title { flex: 1; min-width: 0; font-weight: 600; font-size: 17px; line-height: 24px; color: var(--text-brand); }
+  .d-card .bottom { padding-top: 16px; display: flex; flex-direction: column; gap: 16px; }
+  .d-card .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 8px; }
+  .d-card .tile { padding: 12px 0; display: flex; flex-direction: column; gap: 4px; }
+  .d-card .tile .l { font-size: 14px; line-height: 20px; color: var(--text-tertiary); }
+  .d-card .tile .v { font-weight: 500; font-size: 17px; line-height: 24px; color: var(--text-brand); white-space: nowrap; }
+  .d-card .progress { display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 20px; color: var(--text-tertiary); }
+  .d-card .progress .ph { display: flex; gap: 8px; align-items: center; }
+  .d-card .progress .ph span:first-child { flex: 1; }
+  .d-card .bar { background: var(--surface-brand-subtle); }
+
+  /* ================= MOBILE ================= */
+  .mobile { background: #fff; min-height: 100vh; font-size: 12px; line-height: 16px; }
+  .m-appbar { height: 48px; padding: 0 16px; display: flex; align-items: center; position: sticky; top: 0; background: #fff; z-index: 5; }
+  .m-appbar img { width: 24px; height: 24px; }
+  .m-main { padding: 8px 16px 24px; display: flex; flex-direction: column; gap: 20px; }
+  .m-titleblock { display: flex; flex-direction: column; gap: 16px; }
+  .m-name { font-weight: 600; font-size: 17px; line-height: 24px; color: var(--text-brand); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .m-seg { display: flex; gap: 4px; padding: 2px; border-radius: 100px; background: var(--surface-brand-subtle); }
+  .m-seg button { flex: 1; min-width: 0; padding: 8px 16px; border-radius: 100px; font-weight: 600; font-size: 12px; line-height: 16px; color: var(--text-brand); white-space: nowrap; }
+  .m-seg button.active { background: var(--surface-brand-base-medium); color: #fff; }
+  .m-chips { display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px; scrollbar-width: none; }
+  .m-chips::-webkit-scrollbar { display: none; }
+  .m-chip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-width: 36px; padding: 3px 12px 5px; border-radius: 100px; background: var(--surface-neutral-medium); color: var(--text-tertiary); font-size: 12px; line-height: 16px; white-space: nowrap; }
+  .m-chip img { width: 16px; height: 16px; }
+  .m-chip.active { background: var(--surface-brand-soft-medium); color: var(--text-brand); }
+  .m-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .m-stat { background: var(--surface-brand-subtle); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 4px; min-width: 108px; overflow: hidden; }
+  .m-stat .top { display: flex; align-items: center; gap: 4px; }
+  .m-stat .top img { width: 32px; height: 32px; }
+  .m-stat .value { font-weight: 600; font-size: 14px; line-height: 20px; color: var(--text-brand); white-space: nowrap; }
+  .m-stat .name { color: var(--text-brand); }
+  .m-stat .desc { color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .m-cards { display: flex; flex-direction: column; gap: 12px; }
+  .m-card { background: var(--surface-brand-subtle); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .m-card .head { display: flex; gap: 8px; align-items: flex-start; }
+  .m-card .title { flex: 1; min-width: 0; min-height: 36px; display: flex; align-items: center; font-weight: 600; color: var(--text-brand); }
+  .m-card .params { display: flex; flex-direction: column; gap: 8px; }
+  .m-card .param { height: 48px; padding: 8px 12px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; font-weight: 600; white-space: nowrap; }
+  .m-card .param .l { color: var(--text-brand); }
+  .m-card .param .v { color: var(--text-violet-medium); }
+  .m-card .progress { display: flex; flex-direction: column; gap: 4px; }
+  .m-card .progress .ph { display: flex; gap: 8px; align-items: center; color: var(--text-brand); }
+  .m-card .progress .ph span:first-child { flex: 1; }
+  .m-card .bar { background: #fff; }
+  .m-card .legend { flex-wrap: wrap; gap: 2px 12px; }
+</style>
+</head>
+<body>
+
+<!-- ================= DESKTOP ================= -->
+<div class="desktop">
+  <aside class="sidebar">
+    <div>
+      <div class="logo"><img src="assets/logo.svg" alt="Точка знаний"></div>
+      <nav class="menu">
+        <div class="menu-item"><img class="ic" src="assets/ic-book.svg" alt=""><span class="label">Курсы</span></div>
+        <div class="menu-item"><img class="ic" src="assets/ic-bag.svg" alt=""><span class="label">Заказы</span></div>
+        <div class="menu-item"><img class="ic" src="assets/ic-message.svg" alt=""><span class="label">Чаты</span><span class="counter">1</span></div>
+        <div class="menu-item bold"><img class="ic" src="assets/ic-chart.svg" alt=""><span class="label">Успеваемость</span><img class="ic" src="assets/ic-menu-up.svg" alt=""></div>
+        <div class="menu-item child"><span class="spacer"></span><span>Арина (Я)</span></div>
+        <div class="menu-item child"><span class="spacer"></span><span>Максим</span></div>
+        <div class="menu-item child active"><span class="spacer"></span><span>Пётр</span></div>
+      </nav>
+    </div>
+    <nav>
+      <div class="menu-item"><img class="ic" src="assets/ic-person.svg" alt=""><span class="label">Профиль</span></div>
+      <div class="menu-item"><img class="ic" src="assets/ic-logout.svg" alt=""><span class="label">Выйти</span></div>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="d-header">
+      <img class="back" src="assets/d-ic-back.svg" alt="Назад">
+      <div class="user">
+        <img class="ava" src="assets/ava-user.jpg" alt="">
+        <div><div class="name">Татьяна</div><div>ivanova@mail.ru</div></div>
+      </div>
+    </header>
+    <section class="d-top">
+      <h1 class="d-title">Пётр Иванов</h1>
+      <div class="d-chips" data-chips>
+        <button class="d-chip active">За всё время</button>
+        <button class="d-chip">Неделя <img src="assets/d-chevron.svg" alt=""></button>
+        <button class="d-chip">Месяц <img src="assets/d-chevron.svg" alt=""></button>
+        <button class="d-chip">Свой период <img src="assets/d-calendar.svg" alt=""></button>
+      </div>
+      <div class="d-stats" id="d-stats"></div>
+    </section>
+    <section class="d-content" id="d-cards"></section>
+  </main>
+</div>
+
+<!-- ================= MOBILE ================= -->
+<div class="mobile">
+  <div class="m-appbar"><img src="assets/m-ic-back.svg" alt="Назад"></div>
+  <div class="m-main">
+    <div class="m-titleblock">
+      <div class="m-name">Пётр Иванов</div>
+      <div class="m-seg" data-seg>
+        <button class="active">Активные</button>
+        <button>Завершённые</button>
+      </div>
+      <div class="m-chips" data-chips>
+        <button class="m-chip active">За всё время</button>
+        <button class="m-chip">Неделя <img src="assets/m-chevron.svg" alt=""></button>
+        <button class="m-chip">Месяц <img src="assets/m-chevron.svg" alt=""></button>
+        <button class="m-chip">Свой период <img src="assets/m-calendar.svg" alt=""></button>
+      </div>
+    </div>
+    <div class="m-stats" id="m-stats"></div>
+    <div class="m-cards" id="m-cards"></div>
+  </div>
+</div>
+
+<script>
+  // Данные — как в макетах Figma (D116 «Успеваемость 2.1»)
+  const A1 = {img: 'assets/avatar1.jpg'}, A2 = {img: 'assets/avatar2.jpg'},
+        A3 = {img: 'assets/avatar3.jpg'}, A4 = {img: 'assets/avatar4.jpg'},
+        KI = {initials: 'КИ'}, TA = {initials: 'ТА'}, GN = {initials: 'ГН'},
+        // Новые аватарки десктопа (center — object-cover по центру, как в Figma)
+        H1 = {img: 'assets/d-avatar-history1.jpg', pos: 'center'},
+        H2 = {img: 'assets/d-avatar-history2.jpg', pos: 'center'},
+        G1 = {img: 'assets/d-avatar-geo1.jpg'},
+        G2 = {img: 'assets/d-avatar-geo2.jpg', pos: 'center'};
+
+  const courses = [
+    { title: 'Курс по английскому языку. Подготовка к экзамену по международной сертификации в центре Language Link 6 класс',
+      params: [['Просмотры уроков','18 из 23'],['Тестовая часть','11 из 14'],['Письменная часть','7 из 12']],
+      done: 36, errors: 2, total: 49, avatars: {d:[A1,A2], m:[A1,A2]} },
+    { title: 'Курс по биологии. Ботаника: растительный организм. 6 класс',
+      params: [['Просмотры уроков','29 из 32']],
+      done: 29, errors: 0, total: 32, avatars: {d:[KI], m:[A3]} },
+    { title: 'Курс по истории. 6 класс',
+      params: [['Просмотры уроков','21 из 26'],['Тестовая часть','15 из 17']],
+      done: 36, errors: 0, total: 43, avatars: {d:[H1,H2], m:[KI,A4]} },
+    { title: 'Курс по географии. 6 класс',
+      params: [['Просмотры уроков','9 из 16'],['Тестовая часть','6 из 11'],['Письменная часть','3 из 8']],
+      done: 18, errors: 3, total: 35, avatars: {d:[G1,G2], m:[A1,A2]} },
+    { title: 'Курс по литературе. 6 класс',
+      params: [['Просмотры уроков','14 из 23'],['Тестовая часть','12 из 15'],['Письменная часть','5 из 11']],
+      done: 31, errors: 4, total: 49, avatars: {d:[TA,GN], m:[A1,A2]} },
+    { title: 'Курс по математике. Повышенный уровень. 6 класс',
+      params: [['Просмотры уроков','17 из 27'],['Тестовая часть','20 из 25'],['Письменная часть','13 из 22']],
+      done: 50, errors: 2, total: 74, avatars: {d:[A1,A2], m:[A1,A2]} },
+  ];
+
+  const dStats = [
+    { icon: '<img class="full" src="assets/d-stat-lessons.svg" alt="">', value: '7 из 9', name: 'Просмотры уроков', desc: 'В среднем по 87%' },
+    { icon: '<img class="pic" src="assets/d-stat-tests-pic.svg" alt="">', value: '4 из 9', name: 'Тестовая часть', desc: 'В среднем верно 72%' },
+    { icon: '<img class="full" src="assets/d-stat-written.svg" alt="">', value: '3 из 7', name: 'Письменная часть', desc: 'Приняты сразу 60%' },
+    { icon: '<img class="full" src="assets/d-stat-rno.svg" alt="">', value: '1 из 3', name: 'Выполнено РНО', desc: 'В среднем до 5 дней' },
+  ];
+  const mStats = [
+    { icon: 'assets/m-stat-lessons.svg', value: '72 из 90', name: 'Просмотры уроков', desc: 'В среднем по 40%' },
+    { icon: 'assets/m-stat-tests.svg', value: '21 из 30', name: 'Тестовая часть', desc: 'В среднем верно 72%' },
+    { icon: 'assets/m-stat-homeTasks.svg', value: '24 из 39', name: 'Письменная часть', desc: 'Приняты сразу 67%' },
+    { icon: 'assets/m-stat-rno.svg', value: '2 из 4', name: 'Выполнено РНО', desc: 'В среднем до 5 дней' },
+  ];
+
+  const avatarsHTML = list => `<div class="avatars">${list.map(a => a.initials
+      ? `<div class="avatar initials">${a.initials}</div>`
+      : `<div class="avatar"><img src="${a.img}" alt=""${a.pos ? ` style="object-position:${a.pos}"` : ''}></div>`).join('')}</div>`;
+
+  // Ширина сегментов — доля от total (как padding-left сегментов в Figma)
+  const barHTML = c => `<div class="bar">
+      <div class="seg done" style="width:${c.done / c.total * 100}%"></div>
+      ${c.errors ? `<div class="seg errors" style="width:${c.errors / c.total * 100}%"></div>` : ''}
+    </div>`;
+
+  const legendHTML = (c, p) => `<div class="legend">
+      <div class="legend-item"><img src="assets/${p}-dot-done.svg" alt="">Выполнено — ${c.done}</div>
+      ${c.errors ? `<div class="legend-item"><img src="assets/${p}-dot-errors.svg" alt="">В работе над ошибками — ${c.errors}</div>` : ''}
+    </div>`;
+
+  document.getElementById('d-stats').innerHTML = dStats.map(s => `
+    <div class="d-stat">
+      <div class="top"><div class="icon">${s.icon}</div><div class="value">${s.value}</div></div>
+      <div><div class="name">${s.name}</div><div class="desc">${s.desc}</div></div>
+    </div>`).join('');
+
+  document.getElementById('d-cards').innerHTML = courses.map(c => `
+    <article class="d-card">
+      <div class="head"><div class="title">${c.title}</div>${avatarsHTML(c.avatars.d)}</div>
+      <div class="bottom">
+        <div class="tiles">${c.params.map(([l, v]) => `<div class="tile"><div class="l">${l}</div><div class="v">${v}</div></div>`).join('')}</div>
+        <div class="progress">
+          <div class="ph"><span>Общий прогресс</span><span>${c.done} из ${c.total}</span></div>
+          ${barHTML(c)}
+          ${legendHTML(c, 'd')}
+        </div>
+      </div>
+    </article>`).join('');
+
+  document.getElementById('m-stats').innerHTML = mStats.map(s => `
+    <div class="m-stat">
+      <div class="top"><img src="${s.icon}" alt=""><div class="value">${s.value}</div></div>
+      <div><div class="name">${s.name}</div><div class="desc">${s.desc}</div></div>
+    </div>`).join('');
+
+  document.getElementById('m-cards').innerHTML = courses.map(c => `
+    <article class="m-card">
+      <div class="head"><div class="title">${c.title}</div>${avatarsHTML(c.avatars.m)}</div>
+      <div class="params">${c.params.map(([l, v]) => `<div class="param"><span class="l">${l}</span><span class="v">${v}</span></div>`).join('')}</div>
+      <div class="progress">
+        <div class="ph"><span>Общий прогресс</span><span>${c.done} из ${c.total}</span></div>
+        ${barHTML(c)}
+        ${legendHTML(c, 'm')}
+      </div>
+    </article>`).join('');
+
+  // Переключение активного чипса / сегмента (только визуально — данных для других периодов в макете нет)
+  document.querySelectorAll('[data-chips], [data-seg]').forEach(group => {
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      group.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+
+  // Принудительный режим для проверки: ?view=mobile или ?view=desktop
+  const view = new URLSearchParams(location.search).get('view');
+  if (view === 'mobile') document.body.classList.add('force-mobile');
+  if (view === 'desktop') document.body.classList.add('force-desktop');
+</script>
+</body>
+</html>
